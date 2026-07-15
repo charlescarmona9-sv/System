@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="JobPortalStyle.css">
+</head>
+<body class="page-student">
+    
+
+<div id="studentDashboard" class="dashboard-section" style="display:block;">
+
+    <!-- Header -->
+    <div class="dashboard-header">
+        <div class="logo">
+            <div class="logo-icon">
+                    <img src="LOGO_jobportal.jpg" alt="Logo" style="width:90px;height:90px;object-fit:contain;">
+                </div>
+            <div class="logo-text">
+                <h1 style="font-weight: bold;">CVC Hire</h1>
+                <span></span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="dark-toggle" id="darkModeToggle" title="Toggle dark mode"><i class="fas fa-moon"></i></button>
+            <div class="user-welcome" id="profileTrigger" title="Edit profile">
+                <div class="user-avatar" id="userAvatar">🎓</div>
+                <div class="user-info">
+                    <span class="user-name" id="studentWelcome">Student</span>
+                    <span class="user-role">Student</span>
+                </div>
+                <i class="fas fa-pen"></i>
+            </div>
+            <button class="logout-btn" id="studentLogoutBtn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </div>
+
+    <div class="dashboard-main">
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-briefcase"></i></div>
+                <div class="stat-info"><h3 id="totalJobsCountSt">0</h3><p>Available Jobs</p></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-paper-plane"></i></div>
+                <div class="stat-info"><h3 id="appliedJobsCountSt">0</h3><p>Applications Sent</p></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-bookmark"></i></div>
+                <div class="stat-info"><h3 id="savedJobsCount">0</h3><p>Saved Jobs</p></div>
+            </div>
+        </div>
+
+        <!-- Search -->
+        <div class="search-bar">
+            <input type="text" id="jobSearch" class="search-input" placeholder="🔍  Search by title, company, skills...">
+            <select id="locationFilter">
+                <option value="">📍 All Locations</option>
+                <option value="Remote">🌍 Remote</option>
+                <option value="Bangalore">🏙️ Bangalore</option>
+                <option value="Mumbai">🌆 Mumbai</option>
+            </select>
+            <select id="salarySort">
+                <option value="default">📊 Sort: Relevance</option>
+                <option value="asc">💰 Salary: Low → High</option>
+                <option value="desc">💰 Salary: High → Low</option>
+            </select>
+        </div>
+
+        <!-- All Jobs -->
+        <div class="dashboard-panel">
+            <div class="panel-header">
+                <h3><i class="fas fa-rocket"></i> All Opportunities</h3>
+                <div class="filter-group" id="studentFilterContainer">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="internship">Internships</button>
+                    <button class="filter-btn" data-filter="fulltime">Full-Time</button>
+                    <button class="filter-btn" data-filter="remote">Remote</button>
+                </div>
+            </div>
+            <div id="studentJobList" class="job-list"></div>
+        </div>
+
+        <!-- Applications -->
+        <div class="dashboard-panel">
+            <div class="panel-header">
+                <h3><i class="fas fa-chart-simple"></i> My Applications & Status</h3>
+            </div>
+            <div id="studentAppliedList" class="job-list"></div>
+        </div>
+
+        <!-- Chart -->
+        <div class="dashboard-panel">
+            <div class="panel-header"><h3><i class="fas fa-chart-pie"></i> Application Insights</h3></div>
+            <div class="chart-wrapper">
+                <canvas id="appChart" width="260" height="260" style="max-width:260px;max-height:260px;"></canvas>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ══ Job Detail Modal ══ -->
+<div id="jobDetailModal" class="modal-overlay">
+    <div class="modal-box wide">
+        <button class="modal-close" id="closeJobDetailModal"><i class="fas fa-times"></i></button>
+        <h2 class="modal-title" id="detailTitle">Job Details</h2>
+        <p class="modal-subtitle">Review the role before applying</p>
+        <div class="job-detail-info" id="detailContent"></div>
+        <div class="modal-actions" id="detailActions"></div>
+    </div>
+</div>
+
+<!-- ══ Company Info Modal (view-only for student) ══ -->
+<div id="companyInfoModal" class="modal-overlay">
+    <div class="modal-box wide">
+        <button class="modal-close" id="closeCompanyInfoModal"><i class="fas fa-times"></i></button>
+        <h2 class="modal-title">Company Profile</h2>
+        <p class="modal-subtitle">Learn about this employer before you apply</p>
+        <div id="companyInfoContent"></div>
+    </div>
+</div>
+
+<!-- ══ Interview / Message Modal ══ -->
+<div id="interviewModal" class="modal-overlay">
+    <div class="modal-box wide">
+        <button class="modal-close" id="closeInterviewModal"><i class="fas fa-times"></i></button>
+        <h2 class="modal-title" id="ivTitle">Interview Chat</h2>
+        <p class="modal-subtitle" id="ivSubtitle"></p>
+        <div id="ivMessages" class="iv-messages-box"></div>
+        <div class="iv-input-row">
+            <textarea id="ivInput" class="iv-input" placeholder="Type your message… (Enter to send, Shift+Enter for new line)" rows="2"></textarea>
+            <button class="iv-send-btn" id="ivSendBtn"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+</div>
+
+<!-- ══ Student Profile Edit Modal ══ -->
+<div id="profileEditModal" class="modal-overlay">
+    <div class="modal-box modal-box--large">
+        <button class="modal-close" id="closeProfileModal"><i class="fas fa-times"></i></button>
+        <h2 class="modal-title">My Profile</h2>
+        <p class="modal-subtitle">Fill in your details — employers will see this when you apply</p>
+
+        <!-- Preview -->
+        <div class="profile-preview">
+            <div class="preview-photo-wrap">
+                <div class="preview-avatar" id="previewAvatar">🎓</div>
+            </div>
+            <div class="preview-name" id="previewName">Your Name</div>
+            <div class="preview-role">Student</div>
+        </div>
+
+        <!-- Tab nav — NO avatar tab -->
+        <div class="profile-tabs">
+            <button class="profile-tab-btn active" data-tab="personal"><i class="fas fa-user"></i> Personal</button>
+            <button class="profile-tab-btn" data-tab="skills"><i class="fas fa-star"></i> Skills</button>
+        </div>
+
+        <!-- TAB: Personal -->
+        <div class="profile-tab-content active" id="tab-personal">
+            <div class="form-row-3">
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" id="profileLastName" placeholder="e.g. Santos">
+                </div>
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" id="profileFirstName" placeholder="e.g. Maria">
+                </div>
+                <div class="form-group form-group--sm">
+                    <label>M.I.</label>
+                    <input type="text" id="profileMI" placeholder="e.g. C." maxlength="5">
+                </div>
+            </div>
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label><i class="fas fa-calendar"></i> Date of Birth</label>
+                    <input type="date" id="profileBirthdate">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-hashtag"></i> Age</label>
+                    <input type="number" id="profileAge" placeholder="e.g. 21" min="15" max="80">
+                </div>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-phone"></i> Contact Number</label>
+                <input type="tel" id="profilePhone" placeholder="e.g. 09XX-XXX-XXXX">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-map-marker-alt"></i> Address</label>
+                <input type="text" id="profileAddress" placeholder="e.g. Barangay, City, Province">
+            </div>
+        </div>
+
+        <!-- TAB: Skills -->
+        <div class="profile-tab-content" id="tab-skills">
+            <div class="form-group">
+                <label><i class="fas fa-tools"></i> Skills &amp; Expertise</label>
+                <textarea id="profileSkills" rows="4" placeholder="e.g. Graphic Design, Canva, Adobe Photoshop, Social Media Management..."></textarea>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-graduation-cap"></i> Course / Program</label>
+                <input type="text" id="profileCourse" placeholder="e.g. BS Information Technology">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-school"></i> School / University</label>
+                <input type="text" id="profileSchool" placeholder="e.g. CVC College">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-align-left"></i> About Me</label>
+                <textarea id="profileBio" rows="3" placeholder="A short description about yourself that employers will see..."></textarea>
+            </div>
+        </div>
+
+        <div class="modal-actions" style="margin-top:1.4rem;">
+            <button class="btn-cancel" id="cancelProfileBtn">Cancel</button>
+            <button class="btn-save" id="saveProfileBtn"><i class="fas fa-check"></i> Save Profile</button>
+        </div>
+    </div>
+</div>
+
+<div id="toastMsg"></div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="api/apiClient.js"></script>
+<script src="JobPortalscript.js"></script>
+</body>
+</html>

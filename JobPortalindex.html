@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kupal's Sign In</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="JobPortalStyle.css">
+</head>
+<body class="page-login">
+    
+<div class="app-container">
+    <div class="login-section">
+        <div class="login-card">
+            <div class="login-brand">
+                <div class="logo-icon">
+                    <img src="LOGO_jobportal.jpg" alt="Logo" style="width:150px;height:150px;object-fit:contain;">
+                </div>
+                <h1 style="font-weight: bold;">CVC Hire</h1>
+                <span>Find Work Easier!!</span>
+            </div>
+            <div class="role-tabs" id="roleTabs">
+                <div class="role-tab active" data-role="student"><i class="fas fa-graduation-cap"></i> Student</div>
+                <div class="role-tab" data-role="employee"><i class="fas fa-building"></i> Employer</div>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="loginEmail" placeholder="Email address" value="Cluma,Carmona,Virtudazo@gmail.com">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="loginPassword" placeholder="Password" value="MGABAYOT12345">
+            </div>
+            <button class="login-btn" id="doLoginBtn"><i class="fas fa-arrow-right-to-bracket"></i> Sign In</button>
+            <p class="register-text">Don't have an account? <a href="RegisterPage.html">Register Here</a></p>
+            <div class="demo-note">
+                <i class="fas fa-info-circle"></i>
+                Demo: <strong>student@gmail.com</strong> / student123<br>
+                Employer: <strong>manager@gmail.com</strong> / manager123
+            </div>
+        </div>
+    </div>
+</div>
+<div id="toastMsg"></div>
+<script src="api/apiClient.js"></script>
+<script src="JobPortalscript.js"></script>
+</body>
+</html>

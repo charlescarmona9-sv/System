@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="JobPortalStyle.css">
+</head>
+<body class="page-employer">
+    
+
+<div id="employerDashboard" class="dashboard-section" style="display:block;">
+
+    <!-- Header -->
+    <div class="dashboard-header">
+        <div class="logo">
+            <div class="logo-icon">
+                    <img src="LOGO_jobportal.jpg" alt="Logo" style="width:90px;height:90px;object-fit:contain;">
+                </div>
+            <div class="logo-text">
+                <h1 style="font-weight: bold;">CVC Hire</h1>
+                <span></span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="dark-toggle" id="darkModeToggle2" title="Toggle dark mode"><i class="fas fa-moon"></i></button>
+            <div class="user-welcome" id="empsProfileTrigger" title="Edit company profile">
+                <div class="user-avatar" id="empUserAvatar">🏢</div>
+                <div class="user-info">
+                    <span class="user-name" id="empWelcome">Employer</span>
+                    <span class="user-role">Employer</span>
+                </div>
+                <i class="fas fa-pen"></i>
+            </div>
+            <button class="logout-btn" id="empLogoutBtn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </div>
+
+    <div class="dashboard-main">
+
+        <!-- Post New Job -->
+        <div class="dashboard-panel">
+            <div class="panel-header"><h3><i class="fas fa-plus-circle"></i> Post New Job</h3></div>
+            <div class="add-job-form">
+                <input type="text" id="jobTitle" placeholder="Job Title">
+                <input type="text" id="jobCompany" placeholder="Company Name">
+                <select id="jobType">
+                    <option value="internship">📘 Internship</option>
+                    <option value="fulltime">💼 Full-Time</option>
+                    <option value="remote">🏠 Remote</option>
+                </select>
+                <input type="text" id="jobLocation" placeholder="📍 Location">
+                <input type="text" id="jobSalary" placeholder="💰 Salary">
+                <textarea id="jobDesc" placeholder="📝 Job description..." rows="2"></textarea>
+                <button class="btn-primary" id="postJobBtn"><i class="fas fa-plus"></i> Post Job</button>
+            </div>
+        </div>
+
+        <!-- Job Listings -->
+        <div class="dashboard-panel">
+            <div class="panel-header"><h3><i class="fas fa-list-check"></i> Your Job Listings</h3></div>
+            <div id="employerJobsList" class="job-list"></div>
+        </div>
+
+        <!-- Applicants -->
+        <div class="dashboard-panel">
+            <div class="panel-header"><h3><i class="fas fa-users"></i> Applicants Management</h3></div>
+            <div id="allApplicationsList" class="job-list"></div>
+        </div>
+
+    </div>
+</div>
+
+<div id="companyProfileModal" class="modal-overlay">
+    <div class="modal-box modal-box--large">
+        <button class="modal-close" id="closeCompanyProfileModal"><i class="fas fa-times"></i></button>
+        <h2 class="modal-title">Company Profile</h2>
+        <p class="modal-subtitle">This information is visible to students browsing your job listings</p>
+
+        <div class="profile-preview">
+            <div class="preview-photo-wrap">
+                <div class="preview-avatar">🏢</div>
+            </div>
+            <div class="preview-name" id="cpPreviewName">Your Company</div>
+            <div class="preview-role">Employer</div>
+        </div>
+
+        <div class="profile-tabs">
+            <button class="profile-tab-btn active" data-tab="cpcontact"><i class="fas fa-user-tie"></i> Contact</button>
+            <button class="profile-tab-btn" data-tab="cpcompany"><i class="fas fa-building"></i> Company</button>
+        </div>
+
+        <!-- TAB: Contact -->
+        <div class="profile-tab-content active" id="tab-cpcontact">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Contact Person Name</label>
+                <input type="text" id="cpContactName" placeholder="e.g. Juan Dela Cruz">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-phone"></i> Contact / Company Number</label>
+                <input type="tel" id="cpPhone" placeholder="e.g. 09XX-XXX-XXXX or (02) XXX-XXXX">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-map-marker-alt"></i> Office Address</label>
+                <input type="text" id="cpAddress" placeholder="e.g. Brgy., City, Province">
+            </div>
+        </div>
+
+        <!-- TAB: Company Details -->
+        <div class="profile-tab-content" id="tab-cpcompany">
+            <div class="form-group">
+                <label><i class="fas fa-building"></i> Company Name</label>
+                <input type="text" id="cpCompanyName" placeholder="e.g. TechCorp Inc.">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-industry"></i> Industry</label>
+                <input type="text" id="cpIndustry" placeholder="e.g. Information Technology, Healthcare, BPO...">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-globe"></i> Website</label>
+                <input type="url" id="cpWebsite" placeholder="https://yourcompany.com">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-align-left"></i> Company Description</label>
+                <textarea id="cpDescription" rows="5" placeholder="Tell students about your company, culture, and what makes you a great place to work..."></textarea>
+            </div>
+        </div>
+
+        <div class="modal-actions" style="margin-top:1.4rem;">
+            <button class="btn-cancel" id="cancelCompanyProfileBtn">Cancel</button>
+            <button class="btn-save" id="saveCompanyProfileBtn"><i class="fas fa-check"></i> Save Profile</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══ Applicant Detail Modal ══ -->
+<div id="applicantDetailModal" class="modal-overlay">
+    <div class="modal-box wide">
+        <button class="modal-close" id="closeApplicantDetailModal"><i class="fas fa-times"></i></button>
+        <h2 class="modal-title" id="applicantDetailName">Applicant Profile</h2>
+        <p class="modal-subtitle">Student profile details</p>
+        <div id="applicantDetailContent"></div>
+    </div>
+</div>
+
+<!-- ══ Interview / Message Modal ══ -->
+<div id="interviewModal" class="modal-overlay">
+    <div class="modal-box wide">
+        <button class="modal-close" id="closeInterviewModal"><i class="fas fa-times"></i></button>
+        <h2 class="modal-title" id="ivTitle">Interview Chat</h2>
+        <p class="modal-subtitle" id="ivSubtitle"></p>
+        <div id="ivMessages" class="iv-messages-box"></div>
+        <div class="iv-input-row">
+            <textarea id="ivInput" class="iv-input" placeholder="Type your message… (Enter to send, Shift+Enter for new line)" rows="2"></textarea>
+            <button class="iv-send-btn" id="ivSendBtn"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+</div>
+
+<div id="toastMsg"></div>
+<script src="api/apiClient.js"></script>
+<script src="JobPortalscript.js"></script>
+</body>
+</html>
