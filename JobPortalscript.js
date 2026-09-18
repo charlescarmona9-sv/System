@@ -603,7 +603,7 @@ function logout() {
     currentUser = null;
     sessionStorage.removeItem("cvc_user");
     showToast("Logged out");
-    setTimeout(() => { window.location.href = "JobPortalindex.html"; }, 600);
+    setTimeout(() => { window.location.href = "index.html"; }, 600);
 }
 
 async function checkSession() {
